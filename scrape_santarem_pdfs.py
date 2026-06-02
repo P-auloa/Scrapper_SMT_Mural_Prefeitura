@@ -21,7 +21,7 @@ from bs4 import BeautifulSoup
 # ---------- Configuration ----------
 BASE_URL = "https://santarem.pa.gov.br"
 LISTINGS_URL = urljoin(BASE_URL, "/mural-de-publicacoes")
-MAX_PAGES = 64  # ✅ Defina quantas páginas quer varrer
+MAX_PAGES = 1  # ✅ Defina quantas páginas quer varrer
 KEYWORDS = [
     r"\bsmt\b",
     r"secretaria municipal de mobilidade e tr[âa]nsito",
@@ -41,7 +41,7 @@ HEADERS = {
 }
 
 # Desired output location – change this to wherever you want the PDFs stored
-OUTPUT_DIR = pathlib.Path(r"C:\Users\paulo\PROJETOS\Scrapper_SMT_Mural_Prefeitura\PDFS")
+OUTPUT_DIR = pathlib.Path("PDFS")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 PDF_DIR = OUTPUT_DIR
 PDF_DIR.mkdir(exist_ok=True)

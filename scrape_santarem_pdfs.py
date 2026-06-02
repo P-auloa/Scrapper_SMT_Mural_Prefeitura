@@ -21,6 +21,7 @@ from bs4 import BeautifulSoup
 # ---------- Configuration ----------
 BASE_URL = "https://santarem.pa.gov.br"
 LISTINGS_URL = urljoin(BASE_URL, "/mural-de-publicacoes")
+MAX_PAGES = 5  # ✅ Defina quantas páginas quer varrer
 KEYWORDS = [
     r"\bsmt\b",
     r"secretaria municipal de mobilidade e tr[âa]nsito",
@@ -79,26 +80,35 @@ def find_pdf_links(soup: BeautifulSoup) -> list[str]:
 # ---------- Main scraping routine ----------
 
 def scrape():
-    print(f"Fetching listings page: {LISTINGS_URL}")
-    try:
-        resp = requests.get(LISTINGS_URL, headers=HEADERS, timeout=30)
-        resp.raise_for_status()
-    except Exception as exc:
-        print(f"Failed to get listings page: {exc}")
-        sys.exit(1)
-
-    soup = BeautifulSoup(resp.text, "html.parser")
-    # Find all links that look like publication entries.
-    keyword_regex = re.compile(r"|".join(KEYWORDS), re.I)
     publication_links = []
-    for a in soup.find_all("a", href=True):
-        text = a.get_text(strip=True)
-        if not text:
-            continue
-        if keyword_regex.search(text) or keyword_regex.search(a["href"]):
-            full_url = urljoin(BASE_URL, a["href"])
-            publication_links.append((text, full_url))
-    print(f"Found {len(publication_links)} candidate publications.")
+
+    for page in range(1, MAX_PAGES + 1):
+        # Página 1 não precisa de ?page=1 em alguns sites, mas funciona assim também
+        url = f"{LISTINGS_URL}?page={page}"
+        print(f"Fetching page {page}: {url}")
+        try:
+            resp = requests.get(url, headers=HEADERS, timeout=30)
+            resp.raise_for_status()
+        except Exception as exc:
+            print(f"Failed to get page {page}: {exc}")
+            break
+
+        soup = BeautifulSoup(resp.text, "html.parser")
+        keyword_regex = re.compile(r"|".join(KEYWORDS), re.I)
+
+        found = 0
+        for a in soup.find_all("a", href=True):
+            text = a.get_text(strip=True)
+            if not text:
+                continue
+            if keyword_regex.search(text) or keyword_regex.search(a["href"]):
+                full_url = urljoin(BASE_URL, a["href"])
+                publication_links.append((text, full_url))
+                found += 1
+
+        print(f"  → Found {found} candidates on page {page}.")
+
+    print(f"\nTotal: {len(publication_links)} candidate publications.")
 
     for title, pub_url in publication_links:
         print(f"\nProcessing: {title}")

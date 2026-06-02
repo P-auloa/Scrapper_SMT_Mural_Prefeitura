@@ -1,4 +1,4 @@
-Abrir no Terminal PowerShell
+Abrir no Terminal PowerShell em sequencia
 
 
 python -m venv venv_scrap

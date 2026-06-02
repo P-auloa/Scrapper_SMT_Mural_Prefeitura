@@ -1,0 +1,27 @@
+# Ambiente virtual
+venv_scrap/
+venv/
+.venv/
+
+# PDFs baixados — não versionar arquivos binários grandes
+PDFS/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Logs e temporários
+*.log
+*.tmp
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

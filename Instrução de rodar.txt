@@ -1,0 +1,7 @@
+Abrir no Terminal PowerShell
+
+
+python -m venv venv_scrap
+venv_scrap\Scripts\activate
+pip install -r requirements.txt
+python scrape_santarem_pdfs.py

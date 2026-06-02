@@ -21,7 +21,7 @@ from bs4 import BeautifulSoup
 # ---------- Configuration ----------
 BASE_URL = "https://santarem.pa.gov.br"
 LISTINGS_URL = urljoin(BASE_URL, "/mural-de-publicacoes")
-MAX_PAGES = 5  # ✅ Defina quantas páginas quer varrer
+MAX_PAGES = 64  # ✅ Defina quantas páginas quer varrer
 KEYWORDS = [
     r"\bsmt\b",
     r"secretaria municipal de mobilidade e tr[âa]nsito",
